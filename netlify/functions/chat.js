@@ -41,7 +41,7 @@ ABOUT CLUB PILATES MISSION VALLEY:
 THE FREE INTRO CLASS:
 - 100% free, no strings attached
 - 30-minute full-body Reformer session
-- Semi-private with a highly trained instructor
+- Small group class with a highly trained instructor (up to 12 people, typically a relaxed group)
 - Perfect introduction to the equipment, workout, and studio
 - Booking link: https://members.clubpilates.com/book/clubpilates-mission-valley-ca?classCategory=Intro%20Class
 - When sharing: "When you click the link, you'll create a quick free account — takes about a minute — then you can grab your spot!"
