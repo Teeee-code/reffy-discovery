@@ -722,7 +722,7 @@
     formData.append('transcript', transcript);
     formData.append('timestamp', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
     try {
-      await fetch('/', { method: 'POST', body: formData });
+      await fetch('https://reffy-discovery.netlify.app/', { method: 'POST', body: formData });
     } catch(e) {
       console.log('Transcript submit error:', e);
     }
