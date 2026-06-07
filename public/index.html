@@ -708,21 +708,24 @@
     showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
   }
 
-  /* ── Submit transcript to Netlify Forms ── */
+  /* ── Submit transcript via Netlify function ── */
   async function submitTranscript(prospectName, contactPref, phone, email) {
     const transcript = messages
       .map(m => (m.role === 'user' ? 'PROSPECT: ' : 'REFFY: ') + m.content)
       .join('\n\n');
-    const formData = new FormData();
-    formData.append('form-name', 'reffy-transcript');
-    formData.append('prospect_name', prospectName || 'Unknown');
-    formData.append('contact_preference', contactPref || 'Not specified');
-    formData.append('phone', phone || 'Not provided');
-    formData.append('email', email || 'Not provided');
-    formData.append('transcript', transcript);
-    formData.append('timestamp', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
     try {
-      await fetch('https://reffy-discovery.netlify.app/', { method: 'POST', body: formData });
+      await fetch('/.netlify/functions/transcript', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prospectName: prospectName || 'Unknown',
+          contactPref: contactPref || 'Not specified',
+          phone: phone || 'Not provided',
+          email: email || 'Not provided',
+          transcript,
+          timestamp: new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}),
+        }),
+      });
     } catch(e) {
       console.log('Transcript submit error:', e);
     }
