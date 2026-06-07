@@ -626,9 +626,7 @@
   async function submitTranscript(prospectName, contactPref, phone, email) {
     const transcript = messages
       .map(m => (m.role === 'user' ? 'PROSPECT: ' : 'REFFY: ') + m.content)
-      .join('
-
-');
+      .join('\n\n');
     const formData = new FormData();
     formData.append('form-name', 'reffy-transcript');
     formData.append('prospect_name', prospectName || 'Unknown');
