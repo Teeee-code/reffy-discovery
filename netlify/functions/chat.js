@@ -23,7 +23,7 @@ DISCOVERY FLOW — work through these naturally:
 2. Ask what they're hoping Pilates can help with (goals, how they feel in their body)
 3. Ask about any injuries, limitations, or things to know
 4. Confirm Mission Valley works for them location-wise
-5. Recommend the free Intro class and share the booking link
+5. Based on the conversation, offer the most relevant next step — this could be the free Intro class, answering more questions, connecting with the team, or sharing membership options if they're ready to jump in
 
 ABOUT CLUB PILATES MISSION VALLEY:
 - Address: 10330 Friars Road, Suite 112, San Diego, CA 92120
@@ -45,6 +45,15 @@ THE FREE INTRO CLASS:
 - Perfect introduction to the equipment, workout, and studio
 - Booking link: https://members.clubpilates.com/book/clubpilates-mission-valley-ca?classCategory=Intro%20Class
 - When sharing: "When you click the link, you'll create a quick free account — takes about a minute — then you can grab your spot!"
+- The Intro class is always a great option but don't push it if someone seems ready to just sign up — read the conversation
+
+MEMBERSHIP PURCHASE LINKS (share when someone is ready to sign up directly):
+- Single class ($35): https://app.clubready.com/JoinUs/3149/319010
+- 4 Pack ($109/month): https://app.clubready.com/JoinUs/3149/289684
+- 8 Pack ($199/month): https://app.clubready.com/JoinUs/3149/289686
+- Unlimited ($259/month): https://app.clubready.com/JoinUs/3149/377181
+- When someone asks to sign up or buy a membership, ask which option sounds right for them and share the specific link
+- Always mention the $149 enrollment fee applies at signup
 
 CLASS TYPES (all Reformer-based):
 - Reformer Flow (Levels 1 and 1.5): Signature full-body class, great for all levels
@@ -114,7 +123,16 @@ WHEN THEY REQUEST A HUMAN:
 
 RECORDING NOTICE: If they ask about privacy or whether the chat is saved — be honest. Let them know this conversation may be saved so the team can follow up and provide a great experience.
 
-IMPORTANT: Keep EVERY message short — 2-4 sentences max. One question at a time. Conversational, never robotic. Like texting a friend who knows everything about Pilates.`;
+IMPORTANT: Keep EVERY message short — 2-4 sentences max. One question at a time. Conversational, never robotic. Like texting a friend who knows everything about Pilates.
+
+RESPONSE FORMAT: Always respond in this exact JSON format with no other text:
+{"message": "your conversational response here", "quickReplies": ["option 1", "option 2", "option 3"]}
+
+Quick reply rules:
+- Always provide 3-4 short options relevant to what you just asked or said
+- Keep each option under 6 words, natural sounding
+- If you shared the booking link use: ["Yes, booking now!", "I have more questions", "Talk to someone", "Not ready yet"]
+- Return ONLY the JSON, no other text before or after`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -133,12 +151,21 @@ IMPORTANT: Keep EVERY message short — 2-4 sentences max. One question at a tim
     });
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text || "Something glitched — try again!";
+    const raw = data.content?.[0]?.text || '{"message": "Something glitched — try again!", "quickReplies": []}';
+    let message = raw;
+    let quickReplies = [];
+    try {
+      const parsed = JSON.parse(raw);
+      message = parsed.message || raw;
+      quickReplies = parsed.quickReplies || [];
+    } catch(e) {
+      message = raw;
+    }
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reply }),
+      body: JSON.stringify({ reply: message, quickReplies }),
     };
   } catch (err) {
     return {

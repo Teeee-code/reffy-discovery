@@ -465,7 +465,7 @@
     row.id = 'typing-indicator';
     const av = document.createElement('div');
     av.className = 'avatar-sm';
-    av.textContent = '🌸';
+    av.innerHTML = '<img src="reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:50%;" />';
     row.appendChild(av);
     const bubble = document.createElement('div');
     bubble.className = 'bubble reffy';
@@ -505,7 +505,7 @@
       body: JSON.stringify({ messages }),
     });
     const data = await res.json();
-    return data.reply || "Something glitched — try again!";
+    return { reply: data.reply || "Something glitched — try again!", quickReplies: data.quickReplies || [] };
   }
 
   /* ── Send flow ── */
@@ -519,27 +519,15 @@
     showTyping();
 
     try {
-      const reply = await callReffy();
+      const { reply, quickReplies } = await callReffy();
       removeTyping();
       addMessage('assistant', reply);
-
-      const lower = reply.toLowerCase();
-      if (lower.includes('members.clubpilates.com') || lower.includes('book your free intro')) {
+      if (reply.includes('members.clubpilates.com')) {
         const urlName = new URLSearchParams(window.location.search).get('name') || '';
         submitTranscript(urlName, 'booking link sent', '', '');
       }
-      if (lower.includes('first time') || lower.includes('tried pilates') || lower.includes('brings you here') || lower.includes('what brings')) {
-        showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
-      } else if (lower.includes('hoping') || lower.includes('help you with') || lower.includes('goal') || lower.includes('looking for')) {
-        showQuickReplies(["Core strength & posture", "Back pain relief", "Toning & weight loss", "Stress relief & flexibility"]);
-      } else if (lower.includes('injur') || lower.includes('limitation') || lower.includes('know about') || lower.includes('physical')) {
-        showQuickReplies(["No injuries, all good!", "Lower back issues", "Knee problems", "Just want to know more"]);
-      } else if (lower.includes('nervous') || lower.includes('intimidat') || lower.includes('scared') || lower.includes('worried')) {
-        showQuickReplies(["A little nervous", "Pretty excited!", "Not sure what to expect", "Just want to try it"]);
-      } else if (lower.includes('cost') || lower.includes('pric') || lower.includes('membership') || lower.includes('afford')) {
-        showQuickReplies(["Tell me about memberships", "What does a single class cost?", "Is there a free trial?", "Let me book first"]);
-      } else if (lower.includes('book') || lower.includes('intro class') || lower.includes('get started') || lower.includes('sign up')) {
-        showQuickReplies(["Yes, I want to book!", "Tell me more first", "I have more questions", "Request a team member"]);
+      if (quickReplies && quickReplies.length > 0) {
+        showQuickReplies(quickReplies);
       }
     } catch (e) {
       removeTyping();
