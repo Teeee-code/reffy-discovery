@@ -453,6 +453,15 @@
 
 </div>
 
+<form name="reffy-transcript" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="prospect_name" />
+  <input type="text" name="contact_preference" />
+  <input type="text" name="phone" />
+  <input type="text" name="email" />
+  <textarea name="transcript"></textarea>
+  <input type="text" name="timestamp" />
+</form>
+
 <script>
   const BOOKING_LINK = "https://members.clubpilates.com/book/clubpilates-mission-valley-ca?classCategory=Intro%20Class";
 
@@ -562,6 +571,10 @@
       addMessage('assistant', reply);
 
       const lower = reply.toLowerCase();
+      if (lower.includes('members.clubpilates.com') || lower.includes('book your free intro')) {
+        const urlName = new URLSearchParams(window.location.search).get('name') || '';
+        submitTranscript(urlName, 'booking link sent', '', '');
+      }
       if (!quickRepliesShown && messages.length <= 4) {
         quickRepliesShown = true;
         showQuickReplies(["I'm a complete beginner", "I've tried Pilates before", "I have some injuries", "Just curious!"]);
@@ -631,6 +644,7 @@
       return;
     }
     const prefLabel = pref === 'call' ? 'give you a call' : 'send you a text';
+    submitTranscript(name, pref, phone, document.getElementById('hf-email').value.trim());
     document.getElementById('human-form-area').innerHTML =
       `<div class="success-note">✓ Got it, ${name}! Someone from Club Pilates Mission Valley will ${prefLabel} within 24 hours. So excited to meet you!</div>`;
     addMessage('assistant', `Perfect! I've sent your info to the team, ${name}. They'll ${prefLabel} within 24 hours — they're so excited to meet you! 🎉`);
@@ -638,12 +652,38 @@
 
   /* ── Init ── */
   async function init() {
+    const rawName = new URLSearchParams(window.location.search).get('name') || '';
+    const prospectName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
     showTyping();
     await new Promise(r => setTimeout(r, 1200));
     removeTyping();
-    const greeting = "Hey there! 👋 I'm Reffy, your friendly guide here at Club Pilates Mission Valley. I'm here to answer any questions and help you figure out if Pilates might be a good fit for you — totally no pressure, just a casual chat. So what brings you here today — are you curious about Pilates for the first time, or have you tried it before?";
+    const greeting = prospectName
+      ? `Hey ${prospectName}! 👋 I'm Reffy, your friendly guide here at Club Pilates Mission Valley. I'm here to answer any questions and help you figure out if Pilates might be a good fit for you — totally no pressure, just a casual chat. What brings you here today — are you curious about Pilates for the first time, or have you tried it before?`
+      : "Hey there! 👋 I'm Reffy, your friendly guide here at Club Pilates Mission Valley. I'm here to answer any questions and help you figure out if Pilates might be a good fit for you — totally no pressure, just a casual chat. So what brings you here today — are you curious about Pilates for the first time, or have you tried it before?";
     addMessage('assistant', greeting);
     showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
+  }
+
+  /* ── Submit transcript to Netlify Forms ── */
+  async function submitTranscript(prospectName, contactPref, phone, email) {
+    const transcript = messages
+      .map(m => (m.role === 'user' ? 'PROSPECT: ' : 'REFFY: ') + m.content)
+      .join('
+
+');
+    const formData = new FormData();
+    formData.append('form-name', 'reffy-transcript');
+    formData.append('prospect_name', prospectName || 'Unknown');
+    formData.append('contact_preference', contactPref || 'Not specified');
+    formData.append('phone', phone || 'Not provided');
+    formData.append('email', email || 'Not provided');
+    formData.append('transcript', transcript);
+    formData.append('timestamp', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
+    try {
+      await fetch('/', { method: 'POST', body: formData });
+    } catch(e) {
+      console.log('Transcript submit error:', e);
+    }
   }
 
   /* ── Video intro ── */
