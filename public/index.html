@@ -371,6 +371,83 @@
       animation: fadeUp 0.3s ease;
     }
 
+    /* ── Video player ── */
+    .video-section {
+      width: 100%;
+      max-width: 620px;
+      padding: 20px 16px 4px;
+    }
+
+    .video-player {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--midnight);
+      cursor: pointer;
+    }
+
+    .video-player img.video-thumb {
+      width: 100%;
+      display: block;
+      max-height: 340px;
+      object-fit: cover;
+      object-position: center 30%;
+      transition: opacity 0.2s;
+    }
+
+    .video-player video {
+      width: 100%;
+      display: none;
+      max-height: 340px;
+      object-fit: cover;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      transition: background 0.2s;
+    }
+
+    .play-overlay:hover { background: rgba(0,0,0,0.35); }
+
+    .play-btn-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.15s;
+    }
+
+    .play-btn-circle:hover { transform: scale(1.08); }
+
+    .play-btn-circle svg {
+      width: 24px; height: 24px;
+      fill: var(--midnight);
+      margin-left: 3px;
+    }
+
+    .skip-bar {
+      display: flex;
+      justify-content: center;
+      padding: 10px 0 4px;
+    }
+
+    .skip-bar button {
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .chat-container.hidden { display: none; }
 
   </style>
 </head>
@@ -384,7 +461,24 @@
     <div class="reffy-tagline">Your friendly Pilates guide — here to help, no pressure</div>
   </div>
 
-  <div class="chat-container" id="chat-container">
+  <div class="video-section" id="video-section">
+    <div class="video-player" id="video-player" onclick="startVideo()">
+      <img class="video-thumb" src="reffy-avatar.png" alt="Meet Reffy" id="video-thumb" />
+      <video id="reffy-video" playsinline>
+        <source src="reffy-intro.mp4" type="video/mp4" />
+      </video>
+      <div class="play-overlay" id="play-overlay">
+        <div class="play-btn-circle">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="skip-bar">
+      <button onclick="skipToChat()">Skip intro and start chatting →</button>
+    </div>
+  </div>
+
+  <div class="chat-container hidden" id="chat-container">
     <div class="messages" id="messages"></div>
     <div id="quick-replies-area"></div>
     <div id="human-form-area"></div>
@@ -633,7 +727,33 @@
   document.getElementById('user-input').addEventListener('keydown', handleKey);
   document.getElementById('user-input').addEventListener('input', function() { autoResize(this); });
   document.getElementById('send-btn').addEventListener('click', sendMessage);
-  init();
+
+  /* ── Video player ── */
+  let chatStarted = false;
+
+  function startVideo() {
+    const vid = document.getElementById('reffy-video');
+    const thumb = document.getElementById('video-thumb');
+    const overlay = document.getElementById('play-overlay');
+    const player = document.getElementById('video-player');
+    thumb.style.display = 'none';
+    overlay.style.display = 'none';
+    vid.style.display = 'block';
+    player.style.cursor = 'default';
+    player.onclick = null;
+    vid.addEventListener('ended', skipToChat);
+    vid.play().catch(() => skipToChat());
+  }
+
+  function skipToChat() {
+    if (chatStarted) return;
+    chatStarted = true;
+    const vs = document.getElementById('video-section');
+    const cc = document.getElementById('chat-container');
+    if (vs) vs.style.display = 'none';
+    if (cc) cc.classList.remove('hidden');
+    init();
+  }
 </script>
 </body>
 </html>
