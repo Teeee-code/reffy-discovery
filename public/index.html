@@ -367,6 +367,48 @@
       text-align: center;
       animation: fadeUp 0.3s ease;
     }
+
+    .video-section {
+      width: 100%;
+      max-width: 620px;
+      padding: 20px 16px 4px;
+      animation: fadeUp 0.4s ease;
+    }
+
+    .video-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--midnight);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+
+    .video-wrap video {
+      width: 100%;
+      display: block;
+      max-height: 340px;
+      object-fit: cover;
+    }
+
+    .skip-btn {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(0,0,0,0.55);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .skip-btn:hover { background: rgba(0,0,0,0.75); }
+
+    .chat-container.hidden { display: none; }
   </style>
 </head>
 <body>
@@ -379,7 +421,16 @@
     <div class="reffy-tagline">Your friendly Pilates guide — here to help, no pressure</div>
   </div>
 
-  <div class="chat-container">
+  <div class="video-section" id="video-section">
+    <div class="video-wrap">
+      <video id="reffy-video" autoplay playsinline>
+        <source src="reffy-intro.mp4" type="video/mp4" />
+      </video>
+      <button class="skip-btn" onclick="skipVideo()">Skip intro ›</button>
+    </div>
+  </div>
+
+  <div class="chat-container hidden" id="chat-container">
     <div class="messages" id="messages"></div>
     <div id="quick-replies-area"></div>
     <div id="human-form-area"></div>
@@ -595,7 +646,28 @@
     showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
   }
 
-  init();
+  /* ── Video intro ── */
+  function showChat() {
+    const vs = document.getElementById('video-section');
+    const cc = document.getElementById('chat-container');
+    if (vs) vs.style.display = 'none';
+    if (cc) cc.classList.remove('hidden');
+    init();
+  }
+
+  function skipVideo() {
+    const v = document.getElementById('reffy-video');
+    if (v) v.pause();
+    showChat();
+  }
+
+  const vid = document.getElementById('reffy-video');
+  if (vid) {
+    vid.addEventListener('ended', showChat);
+    vid.play().catch(() => showChat());
+  } else {
+    showChat();
+  }
 </script>
 </body>
 </html>
