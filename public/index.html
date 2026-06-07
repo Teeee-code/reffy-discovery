@@ -396,11 +396,10 @@
         Prefer a real person? <button onclick="showHumanForm()">Request a team member</button>
       </div>
       <div class="input-wrap">
-        <textarea id="user-input" placeholder="Type a message..." rows="1"
-          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea id="user-input" placeholder="Type a message..." rows="1"></textarea>
       </div>
     </div>
-    <button class="send-btn" id="send-btn" onclick="sendMessage()">
+    <button class="send-btn" id="send-btn">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
     </button>
   </div>
@@ -645,6 +644,9 @@
     }
   }
 
+  document.getElementById('user-input').addEventListener('keydown', handleKey);
+  document.getElementById('user-input').addEventListener('input', function() { autoResize(this); });
+  document.getElementById('send-btn').addEventListener('click', sendMessage);
   init();
 </script>
 </body>
