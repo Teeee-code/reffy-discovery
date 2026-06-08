@@ -546,19 +546,23 @@
     container.scrollTop = container.scrollHeight;
   }
 
+  function getLinkLabel(url) {
+    if (url.includes('319010')) return 'Sign up — Single Class ($35) →';
+    if (url.includes('289684')) return 'Sign up — 4 Class Pack ($109/mo) →';
+    if (url.includes('289686')) return 'Sign up — 8 Class Pack ($199/mo) →';
+    if (url.includes('377181')) return 'Sign up — Unlimited ($259/mo) →';
+    if (url.includes('clubready.com')) return 'Sign up for membership →';
+    if (url.includes('apps.apple.com')) return 'Download on the App Store →';
+    if (url.includes('play.google.com')) return 'Get it on Google Play →';
+    if (url.includes('missionvalley#schedule') || url.includes('location/missionvalley')) return 'View full schedule →';
+    if (url.includes('clubpilates.com/book')) return 'Book your free Intro class →';
+    return 'Learn more →';
+  }
+
   function formatText(text) {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(
-        /(https?:\/\/[^\s<]+)/g,
-        (url => {
-          if (url.includes('clubready.com')) return `<a href="${url}" target="_blank" rel="noopener">Click here to sign up →</a>`;
-          if (url.includes('apps.apple.com')) return `<a href="${url}" target="_blank" rel="noopener">Download on the App Store →</a>`;
-          if (url.includes('play.google.com')) return `<a href="${url}" target="_blank" rel="noopener">Get it on Google Play →</a>`;
-          if (url.includes('missionvalley#schedule')) return `<a href="${url}" target="_blank" rel="noopener">View full schedule →</a>`;
-          return `<a href="${url}" target="_blank" rel="noopener">Click here to book your free Intro class →</a>`;
-        })("$1")
-      )
+      .replace(/(https?:\/\/[^\s<)]+)/g, (url) => `<a href="${url}" target="_blank" rel="noopener">${getLinkLabel(url)}</a>`)
       .replace(/\n/g, '<br>');
   }
 

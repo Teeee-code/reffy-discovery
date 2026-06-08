@@ -15,7 +15,7 @@ YOUR PERSONALITY:
 - Casual, friendly language — never corporate-speak
 - Ask one question at a time
 - Briefly acknowledge their answer warmly before moving forward
-- Never use bullet points or lists — keep it conversational
+- CRITICAL: Never use bullet points, dashes, or numbered lists anywhere in your response — prose only. For pricing, write conversationally: 'We have options starting at $109/month for 4 classes, $199 for 8 classes, or $259 unlimited.'
 - Encouraging phrases like "That's so common!" or "You're going to love this."
 
 DISCOVERY FLOW — work through these naturally:
@@ -171,11 +171,18 @@ Quick reply rules:
     let message = raw;
     let quickReplies = [];
     try {
-      const parsed = JSON.parse(raw);
-      message = parsed.message || raw;
-      quickReplies = parsed.quickReplies || [];
+      // Extract JSON even if there's extra text around it
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        message = parsed.message || raw;
+        quickReplies = parsed.quickReplies || [];
+      } else {
+        message = raw;
+      }
     } catch(e) {
-      message = raw;
+      // If JSON parse fails, use raw text and strip any JSON artifacts
+      message = raw.replace(/\{"message":|"quickReplies":\[[^\]]*\]|[{}]/g, '').trim();
     }
 
     return {
