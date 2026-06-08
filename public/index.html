@@ -551,7 +551,13 @@
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(
         /(https?:\/\/[^\s<]+)/g,
-        `<a href="$1" target="_blank" rel="noopener">Click here to book your free Intro class →</a>`
+        (url => {
+          if (url.includes('clubready.com')) return `<a href="${url}" target="_blank" rel="noopener">Click here to sign up →</a>`;
+          if (url.includes('apps.apple.com')) return `<a href="${url}" target="_blank" rel="noopener">Download on the App Store →</a>`;
+          if (url.includes('play.google.com')) return `<a href="${url}" target="_blank" rel="noopener">Get it on Google Play →</a>`;
+          if (url.includes('missionvalley#schedule')) return `<a href="${url}" target="_blank" rel="noopener">View full schedule →</a>`;
+          return `<a href="${url}" target="_blank" rel="noopener">Click here to book your free Intro class →</a>`;
+        })("$1")
       )
       .replace(/\n/g, '<br>');
   }
@@ -622,6 +628,7 @@
       addMessage('assistant', reply);
       if (reply.includes('members.clubpilates.com')) {
         const urlName = new URLSearchParams(window.location.search).get('name') || '';
+        transcriptSent = true;
         submitTranscript(urlName, 'booking link sent', '', '');
       }
       if (quickReplies && quickReplies.length > 0) {
@@ -734,6 +741,32 @@
   document.getElementById('user-input').addEventListener('keydown', handleKey);
   document.getElementById('user-input').addEventListener('input', function() { autoResize(this); });
   document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+  /* ── Session-end transcript trigger ── */
+  let transcriptSent = false;
+  let inactivityTimer = null;
+
+  function sendSessionTranscript() {
+    if (transcriptSent || messages.length < 2) return;
+    transcriptSent = true;
+    const urlName = new URLSearchParams(window.location.search).get('name') || '';
+    submitTranscript(urlName, 'session ended', '', '');
+  }
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(sendSessionTranscript, 10 * 60 * 1000); // 10 min
+  }
+
+  // Fire on tab/window close
+  window.addEventListener('beforeunload', sendSessionTranscript);
+  // Fire on visibility change (tab switch on mobile)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') sendSessionTranscript();
+  });
+  // Reset inactivity timer on any user interaction
+  document.addEventListener('click', resetInactivityTimer);
+  document.addEventListener('keydown', resetInactivityTimer);
 
   /* ── Video player ── */
   let chatStarted = false;
