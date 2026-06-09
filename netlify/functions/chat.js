@@ -25,6 +25,7 @@ const STUDIOS = {
       all: ["Monday at 7:15pm", "Thursday at 1pm", "Sunday at 12:15pm"],
     },
     bookingLink: "https://lp.clubpilates.com/offers?offer_id=intro-class-promo&booking=1&location=missionvalley",
+    scheduleLink: "https://www.clubpilates.com/location/missionvalley#schedule",
     membershipLinks: {
       single: "https://app.clubready.com/JoinUs/3149/319010",
       fourPack: "https://app.clubready.com/JoinUs/3149/289684",
@@ -52,6 +53,7 @@ const STUDIOS = {
       all: ["Tuesday at 6:30pm", "Friday at 12pm", "Sunday at 1pm"],
     },
     bookingLink: "https://lp.clubpilates.com/offers?offer_id=intro-class-promo&booking=1&location=lamesa",
+    scheduleLink: "https://www.clubpilates.com/location/lamesa#schedule",
     membershipLinks: {
       single: "https://app.clubready.com/JoinUs/3087/319010",
       fourPack: "https://app.clubready.com/JoinUs/3087/289684",
@@ -79,6 +81,7 @@ const STUDIOS = {
       all: ["Wednesday at 12pm", "Sunday at 12pm"],
     },
     bookingLink: "https://lp.clubpilates.com/offers?offer_id=intro-class-promo&booking=1&location=northpark",
+    scheduleLink: "https://www.clubpilates.com/location/northpark#schedule",
     membershipLinks: {
       single: "https://app.clubready.com/JoinUs/3150/319010",
       fourPack: "https://app.clubready.com/JoinUs/3150/289684",
@@ -106,6 +109,7 @@ const STUDIOS = {
       all: ["Monday at 7:30pm", "Thursday at 12pm", "Saturday at 11am"],
     },
     bookingLink: "https://lp.clubpilates.com/offers?offer_id=intro-class-promo&booking=1&location=santee",
+    scheduleLink: "https://www.clubpilates.com/location/santee#schedule",
     membershipLinks: {
       single: "https://app.clubready.com/JoinUs/3153/319010",
       fourPack: "https://app.clubready.com/JoinUs/3153/289684",
@@ -160,8 +164,12 @@ CLASSES:
 - Circuit (L1.5): Athletic Pilates, strength + cardio (not at North Park)
 - No Restore, no Teen classes at our locations
 
-POLICIES:
-- Cancel class: 12 hours notice; no-show = $25 (unlimited) or lost session (packs)
+POLICIES & BOOKING:
+- Cancellation: 12 hours notice required before class — no-show = $25 fee (unlimited) or lost session credit (packs)
+- 4 and 8 pack credits refresh monthly and do not roll over — by design to keep members consistent
+- Unlimited: book up to 15 classes at a time
+- If asked about the schedule: share the studio schedule link (${s.scheduleLink})
+- If asked about booking in advance: "Once you're a member you can start booking right away — the team will walk you through how it all works when you come in"
 - Membership freeze: $25/month, up to 3 months/year
 - Referral: $25 credit when a referred friend buys a membership
 - Late policy: Not admitted more than 5 minutes late
@@ -195,6 +203,8 @@ INTRO CLASS TIMES:
 - Weekday evening: ${s.introTimes.evening.join(", ") || "none"}
 - Weekend: ${s.introTimes.weekend.join(", ") || "none"}
 - All times: ${s.introTimes.all.join(", ")}
+
+SCHEDULE LINK: ${s.scheduleLink}
 
 MEMBERSHIP LINKS FOR YOUR STUDIO:
 - Single ($35): ${s.membershipLinks.single}
@@ -280,7 +290,9 @@ RESPONSE FORMAT:
 - 2-3 sentences max per response
 - After each response, suggest 2-3 quick reply options as a JSON array at the very end:
 QUICK_REPLIES: ["Option 1", "Option 2", "Option 3"]
-- Quick replies should feel like natural things a real person would say
+- Quick replies should feel like natural things a real person would say — always positive and forward-moving
+- Never suggest quick replies that plant doubt or anxiety (e.g. "What if I can't keep up?" "What if I don't like it?") — if a prospect has those concerns they'll type them naturally
+- Quick replies should move the conversation forward, not open doors to hesitation
 - When prospect confirms an intro time, trigger the transcript
 - On the very first message (START_CONVERSATION), open with warmth and a little personality before asking anything. Feel unhurried. Then always end with quick replies: ["First time — just curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]
 
