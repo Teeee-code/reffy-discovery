@@ -316,7 +316,7 @@ exports.handler = async (event) => {
       model: "claude-sonnet-4-20250514",
       max_tokens: 1000,
       system: systemPrompt,
-      messages: messages,
+      messages: messages.length > 0 ? messages : [{ role: "user", content: "START_CONVERSATION" }],
     });
 
     const replyText =
