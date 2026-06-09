@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meet Reffy | Club Pilates</title>
+  <title>Meet Reffy | Club Pilates Mission Valley</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,6 +33,7 @@
       align-items: center;
     }
 
+    /* ── Hero ── */
     .hero {
       width: 100%;
       background: var(--midnight);
@@ -84,7 +85,8 @@
       background: #C8A96E;
     }
     .reffy-avatar img {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       object-position: center 20%;
     }
@@ -109,6 +111,7 @@
       z-index: 1;
     }
 
+    /* ── Chat ── */
     .chat-container {
       width: 100%;
       max-width: 620px;
@@ -173,9 +176,15 @@
       border-bottom-right-radius: 4px;
     }
 
-    .bubble a { color: var(--steel); font-weight: 500; text-decoration: underline; }
+    .bubble a {
+      color: var(--steel);
+      font-weight: 500;
+      text-decoration: underline;
+    }
+
     .bubble.user a { color: rgba(255,255,255,0.9); }
 
+    /* ── Typing indicator ── */
     .typing-dot {
       display: inline-block;
       width: 6px; height: 6px;
@@ -192,6 +201,7 @@
       30%            { transform: translateY(-5px); }
     }
 
+    /* ── Quick replies ── */
     .quick-replies {
       display: flex;
       flex-wrap: wrap;
@@ -213,8 +223,13 @@
       font-weight: 500;
     }
 
-    .qr-btn:hover { background: var(--steel); color: white; border-color: var(--steel); }
+    .qr-btn:hover {
+      background: var(--steel);
+      color: white;
+      border-color: var(--steel);
+    }
 
+    /* ── Input bar ── */
     .input-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -273,6 +288,7 @@
     .send-btn:hover  { background: #3d6a9a; }
     .send-btn:active { transform: scale(0.95); }
     .send-btn:disabled { background: var(--warm-gray); cursor: not-allowed; }
+
     .send-btn svg { width: 16px; height: 16px; fill: white; }
 
     .human-bar {
@@ -293,6 +309,7 @@
       font-weight: 500;
     }
 
+    /* ── Human form ── */
     .human-form {
       background: white;
       border: 1px solid var(--warm-gray);
@@ -354,6 +371,7 @@
       animation: fadeUp 0.3s ease;
     }
 
+    /* ── Video player ── */
     .video-section {
       width: 100%;
       max-width: 620px;
@@ -430,13 +448,14 @@
     }
 
     .chat-container.hidden { display: none; }
+
   </style>
 </head>
 <body>
 <div class="page">
 
   <div class="hero">
-    <div class="studio-label" id="studio-label">Club Pilates</div>
+    <div class="studio-label">Club Pilates · Mission Valley, San Diego</div>
     <div class="reffy-avatar"><img src="reffy-avatar.png" alt="Reffy" /></div>
     <div class="reffy-name">Hi, I'm Reffy!</div>
     <div class="reffy-tagline">Your friendly Pilates guide — here to help, no pressure</div>
@@ -485,39 +504,23 @@
 
 </div>
 
+<form name="reffy-transcript" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="prospect_name" />
+  <input type="text" name="contact_preference" />
+  <input type="text" name="phone" />
+  <input type="text" name="email" />
+  <textarea name="transcript"></textarea>
+  <input type="text" name="timestamp" />
+</form>
+
 <script>
-  // ── URL params ───────────────────────────────────────────────────────────────
-  const urlParams    = new URLSearchParams(window.location.search);
-  const rawName      = urlParams.get('name') || '';
-  const prospectName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
-  const studioParam  = urlParams.get('studio') || 'missionvalley';
+  const BOOKING_LINK = "https://members.clubpilates.com/book/clubpilates-mission-valley-ca?classCategory=Intro%20Class";
 
-  const STUDIO_LABELS = {
-    missionvalley: 'Club Pilates · Mission Valley, San Diego',
-    lamesa:        'Club Pilates · La Mesa, San Diego',
-    northpark:     'Club Pilates · North Park, San Diego',
-    santee:        'Club Pilates · Santee, San Diego',
-  };
-
-  const STUDIO_NAMES = {
-    missionvalley: 'Club Pilates Mission Valley',
-    lamesa:        'Club Pilates La Mesa',
-    northpark:     'Club Pilates North Park',
-    santee:        'Club Pilates Santee',
-  };
-
-  // Set hero and page title dynamically
-  document.getElementById('studio-label').textContent =
-    STUDIO_LABELS[studioParam] || STUDIO_LABELS['missionvalley'];
-  document.title = 'Meet Reffy | ' + (STUDIO_NAMES[studioParam] || 'Club Pilates');
-
-  let studioName = STUDIO_NAMES[studioParam] || STUDIO_NAMES['missionvalley'];
   let messages = [];
   let isLoading = false;
-  let transcriptSent = false;
-  let inactivityTimer = null;
+  let quickRepliesShown = false;
 
-  // ── Render helpers ───────────────────────────────────────────────────────────
+  /* ── Render helpers ── */
   function addMessage(role, text) {
     messages.push({ role, content: text });
     renderMessage(role, text);
@@ -527,12 +530,14 @@
     const container = document.getElementById('messages');
     const row = document.createElement('div');
     row.className = 'msg-row ' + (role === 'user' ? 'user' : 'reffy');
+
     if (role !== 'user') {
       const av = document.createElement('div');
       av.className = 'avatar-sm';
       av.innerHTML = '<img src="reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%;"/>';
       row.appendChild(av);
     }
+
     const bubble = document.createElement('div');
     bubble.className = 'bubble ' + (role === 'user' ? 'user' : 'reffy');
     bubble.innerHTML = formatText(text);
@@ -542,25 +547,22 @@
   }
 
   function getLinkLabel(url) {
-    if (url.includes('319010'))            return 'Sign up — Single Class ($35) →';
-    if (url.includes('289684'))            return 'Sign up — 4 Class Pack ($109/mo) →';
-    if (url.includes('289686'))            return 'Sign up — 8 Class Pack ($199/mo) →';
-    if (url.includes('377181'))            return 'Sign up — Unlimited ($259/mo) →';
-    if (url.includes('clubready.com'))     return 'Sign up for membership →';
-    if (url.includes('lp.clubpilates.com'))return 'Book your free Intro class →';
+    if (url.includes('319010')) return 'Sign up — Single Class ($35) →';
+    if (url.includes('289684')) return 'Sign up — 4 Class Pack ($109/mo) →';
+    if (url.includes('289686')) return 'Sign up — 8 Class Pack ($199/mo) →';
+    if (url.includes('377181')) return 'Sign up — Unlimited ($259/mo) →';
+    if (url.includes('clubready.com')) return 'Sign up for membership →';
+    if (url.includes('apps.apple.com')) return 'Download on the App Store →';
+    if (url.includes('play.google.com')) return 'Get it on Google Play →';
+    if (url.includes('missionvalley#schedule') || url.includes('location/missionvalley')) return 'View full schedule →';
     if (url.includes('clubpilates.com/book')) return 'Book your free Intro class →';
-    if (url.includes('apps.apple.com'))    return 'Download on the App Store →';
-    if (url.includes('play.google.com'))   return 'Get it on Google Play →';
-    if (url.includes('clubpilates.com/location')) return 'View full schedule →';
-    if (url.includes('tinyurl.com'))       return 'Get directions →';
     return 'Learn more →';
   }
 
   function formatText(text) {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/(https?:\/\/[^\s<)]+)/g, (url) =>
-        `<a href="${url}" target="_blank" rel="noopener">${getLinkLabel(url)}</a>`)
+      .replace(/(https?:\/\/[^\s<)]+)/g, (url) => `<a href="${url}" target="_blank" rel="noopener">${getLinkLabel(url)}</a>`)
       .replace(/\n/g, '<br>');
   }
 
@@ -586,7 +588,7 @@
     if (el) el.remove();
   }
 
-  // ── Quick replies ────────────────────────────────────────────────────────────
+  /* ── Quick replies ── */
   function showQuickReplies(replies) {
     const area = document.getElementById('quick-replies-area');
     area.innerHTML = '';
@@ -603,26 +605,18 @@
     area.appendChild(wrap);
   }
 
-  // ── API call — passes studio + prospectName ──────────────────────────────────
+  /* ── API call (goes through Netlify function) ── */
   async function callReffy() {
     const res = await fetch('/.netlify/functions/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages,
-        studio: studioParam,
-        prospectName: prospectName,
-      }),
+      body: JSON.stringify({ messages }),
     });
     const data = await res.json();
-    if (data.studioName) studioName = data.studioName;
-    return {
-      reply:        data.reply        || "Something glitched — try again!",
-      quickReplies: data.quickReplies || [],
-    };
+    return { reply: data.reply || "Something glitched — try again!", quickReplies: data.quickReplies || [] };
   }
 
-  // ── Send flow ────────────────────────────────────────────────────────────────
+  /* ── Send flow ── */
   async function sendUserMessage(text) {
     if (!text.trim() || isLoading) return;
     isLoading = true;
@@ -631,17 +625,19 @@
 
     addMessage('user', text);
     showTyping();
-    resetInactivityTimer();
 
     try {
       const { reply, quickReplies } = await callReffy();
       removeTyping();
       addMessage('assistant', reply);
-      if ((reply.includes('lp.clubpilates.com') || reply.includes('clubpilates.com/book')) && !transcriptSent) {
+      if (reply.includes('members.clubpilates.com')) {
+        const urlName = new URLSearchParams(window.location.search).get('name') || '';
         transcriptSent = true;
-        submitTranscript(prospectName, 'booking link sent', '', '');
+        submitTranscript(urlName, 'booking link sent', '', '');
       }
-      if (quickReplies && quickReplies.length > 0) showQuickReplies(quickReplies);
+      if (quickReplies && quickReplies.length > 0) {
+        showQuickReplies(quickReplies);
+      }
     } catch (e) {
       removeTyping();
       addMessage('assistant', "Oops — something glitched on my end! Try sending that again.");
@@ -669,7 +665,7 @@
     el.style.height = Math.min(el.scrollHeight, 100) + 'px';
   }
 
-  // ── Human form ───────────────────────────────────────────────────────────────
+  /* ── Human form ── */
   function showHumanForm() {
     const area = document.getElementById('human-form-area');
     if (area.querySelector('.human-form')) return;
@@ -694,42 +690,37 @@
   }
 
   function submitHumanRequest() {
-    const name   = document.getElementById('hf-name').value.trim();
-    const phone  = document.getElementById('hf-phone').value.trim();
-    const email  = document.getElementById('hf-email').value.trim();
+    const name  = document.getElementById('hf-name').value.trim();
+    const phone = document.getElementById('hf-phone').value.trim();
     const prefEl = document.querySelector('input[name="contact-pref"]:checked');
-    const pref   = prefEl ? prefEl.value : 'text';
+    const pref = prefEl ? prefEl.value : 'text';
     if (!name || !phone) {
       alert('Please enter your name and phone number so we can reach you!');
       return;
     }
     const prefLabel = pref === 'call' ? 'give you a call' : 'send you a text';
-    submitTranscript(name, pref, phone, email);
+    submitTranscript(name, pref, phone, document.getElementById('hf-email').value.trim());
     document.getElementById('human-form-area').innerHTML =
-      `<div class="success-note">Got it, ${name}! Someone from ${studioName} will ${prefLabel} within 24 hours. So excited to meet you!</div>`;
+      `<div class="success-note">✓ Got it, ${name}! Someone from Club Pilates Mission Valley will ${prefLabel} within 24 hours. So excited to meet you!</div>`;
     addMessage('assistant', `Perfect! I've sent your info to the team, ${name}. They'll ${prefLabel} within 24 hours — they're so excited to meet you! 🎉`);
   }
 
-  // ── Init — opening message comes from AI ─────────────────────────────────────
+  /* ── Init ── */
   async function init() {
+    const rawName = new URLSearchParams(window.location.search).get('name') || '';
+    const prospectName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
     showTyping();
-    try {
-      const { reply, quickReplies } = await callReffy();
-      removeTyping();
-      addMessage('assistant', reply);
-      if (quickReplies && quickReplies.length > 0) showQuickReplies(quickReplies);
-    } catch(e) {
-      removeTyping();
-      const greeting = prospectName
-        ? `Hey ${prospectName}! I'm Reffy, your friendly guide here at ${studioName}. What brings you here today?`
-        : `Hey there! I'm Reffy, your friendly guide here at ${studioName}. What brings you here today?`;
-      addMessage('assistant', greeting);
-      showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
-    }
+    await new Promise(r => setTimeout(r, 1200));
+    removeTyping();
+    const greeting = prospectName
+      ? `Hey ${prospectName}! 👋 I'm Reffy, your friendly guide here at Club Pilates Mission Valley. I'm here to answer any questions and help you figure out if Pilates might be a good fit for you — totally no pressure, just a casual chat. What brings you here today — are you curious about Pilates for the first time, or have you tried it before?`
+      : "Hey there! 👋 I'm Reffy, your friendly guide here at Club Pilates Mission Valley. I'm here to answer any questions and help you figure out if Pilates might be a good fit for you — totally no pressure, just a casual chat. So what brings you here today — are you curious about Pilates for the first time, or have you tried it before?";
+    addMessage('assistant', greeting);
+    showQuickReplies(["First time curious!", "I've tried Pilates before", "A friend recommended it", "Tell me more first"]);
   }
 
-  // ── Transcript ───────────────────────────────────────────────────────────────
-  async function submitTranscript(pName, contactPref, phone, email) {
+  /* ── Submit transcript via Netlify function ── */
+  async function submitTranscript(prospectName, contactPref, phone, email) {
     const transcript = messages
       .map(m => (m.role === 'user' ? 'PROSPECT: ' : 'REFFY: ') + m.content)
       .join('\n\n');
@@ -738,14 +729,12 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prospectName: pName || 'Unknown',
-          contactPref:  contactPref || 'Not specified',
-          phone:        phone || 'Not provided',
-          email:        email || 'Not provided',
-          studio:       studioParam,
-          studioName:   studioName,
+          prospectName: prospectName || 'Unknown',
+          contactPref: contactPref || 'Not specified',
+          phone: phone || 'Not provided',
+          email: email || 'Not provided',
           transcript,
-          timestamp: new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }),
+          timestamp: new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}),
         }),
       });
     } catch(e) {
@@ -757,38 +746,45 @@
   document.getElementById('user-input').addEventListener('input', function() { autoResize(this); });
   document.getElementById('send-btn').addEventListener('click', sendMessage);
 
-  // ── Session-end transcript ───────────────────────────────────────────────────
+  /* ── Session-end transcript trigger ── */
+  let transcriptSent = false;
+  let inactivityTimer = null;
+
   function sendSessionTranscript() {
     if (transcriptSent || messages.length < 2) return;
     transcriptSent = true;
-    submitTranscript(prospectName, 'session ended', '', '');
+    const urlName = new URLSearchParams(window.location.search).get('name') || '';
+    submitTranscript(urlName, 'session ended', '', '');
   }
 
   function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(sendSessionTranscript, 10 * 60 * 1000);
+    inactivityTimer = setTimeout(sendSessionTranscript, 10 * 60 * 1000); // 10 min
   }
 
+  // Fire on tab/window close
   window.addEventListener('beforeunload', sendSessionTranscript);
+  // Fire on visibility change (tab switch on mobile)
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') sendSessionTranscript();
   });
+  // Reset inactivity timer on any user interaction
   document.addEventListener('click', resetInactivityTimer);
   document.addEventListener('keydown', resetInactivityTimer);
 
-  // ── Video player ─────────────────────────────────────────────────────────────
+  /* ── Video player ── */
   let chatStarted = false;
 
   function startVideo() {
-    const vid     = document.getElementById('reffy-video');
-    const thumb   = document.getElementById('video-thumb');
+    const vid = document.getElementById('reffy-video');
+    const thumb = document.getElementById('video-thumb');
     const overlay = document.getElementById('play-overlay');
-    const player  = document.getElementById('video-player');
-    thumb.style.display   = 'none';
+    const player = document.getElementById('video-player');
+    thumb.style.display = 'none';
     overlay.style.display = 'none';
-    vid.style.display     = 'block';
-    player.style.cursor   = 'default';
-    player.onclick        = null;
+    vid.style.display = 'block';
+    player.style.cursor = 'default';
+    player.onclick = null;
     vid.addEventListener('ended', skipToChat);
     vid.play().catch(() => skipToChat());
   }

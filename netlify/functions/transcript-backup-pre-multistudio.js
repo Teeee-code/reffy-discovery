@@ -1,30 +1,10 @@
-const STUDIO_EMAILS = {
-  missionvalley: 'missionvalley@clubpilates.com',
-  lamesa:        'lamesa@clubpilates.com',
-  northpark:     'northpark@clubpilates.com',
-  santee:        'santee@clubpilates.com',
-};
-
 exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const {
-      prospectName,
-      contactPref,
-      phone,
-      email,
-      transcript,
-      timestamp,
-      studio,
-      studioName,
-    } = JSON.parse(event.body);
-
-    // Resolve destination email — per-studio if available, fallback to NOTIFY_EMAIL
-    const toEmail = STUDIO_EMAILS[studio] || process.env.NOTIFY_EMAIL;
-    const displayName = studioName || 'Club Pilates';
+    const { prospectName, contactPref, phone, email, transcript, timestamp } = JSON.parse(event.body);
 
     // Generate PATH summary using Claude
     let pathSummary = '';
@@ -66,7 +46,6 @@ Return ONLY the PATH notes in clean plain text, no extra commentary.`
 
     const emailBody = `NEW REFFY CONVERSATION
 ======================
-Studio: ${displayName}
 Prospect: ${prospectName || 'Unknown'}
 Phone: ${phone || 'Not provided'}
 Email: ${email || 'Not provided'}
@@ -89,8 +68,8 @@ ${transcript}`.trim();
       },
       body: JSON.stringify({
         from: 'Reffy <onboarding@resend.dev>',
-        to: [toEmail],
-        subject: `New Reffy Conversation — ${prospectName || 'Prospect'} | ${displayName}`,
+        to: [process.env.NOTIFY_EMAIL],
+        subject: `New Reffy Conversation — ${prospectName || 'Prospect'} | Club Pilates Mission Valley`,
         text: emailBody,
       }),
     });
