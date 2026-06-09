@@ -488,9 +488,10 @@
 <script>
   // ── URL params ───────────────────────────────────────────────────────────────
   const urlParams    = new URLSearchParams(window.location.search);
-  const rawName      = urlParams.get('name') || '';
+  const rawName = urlParams.get("name") || pathParts[1] || "";
   const prospectName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
-  const studioParam  = urlParams.get('studio') || 'missionvalley';
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const studioParam  = urlParams.get("studio") || (pathParts[0] && pathParts[0] !== "generate" ? pathParts[0] : "missionvalley");
 
   const STUDIO_LABELS = {
     missionvalley: 'Club Pilates · Mission Valley, San Diego',
