@@ -66,6 +66,7 @@ const STUDIOS = {
       level2: ["Reformer Flow (instructor approval required)"],
     },
     sisters: ["Mission Valley", "North Park", "Santee"],
+    scheduleNote: "Classes run on the hour every hour throughout the day — no midday break",
   },
 
   northpark: {
