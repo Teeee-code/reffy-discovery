@@ -638,7 +638,7 @@
       const { reply, quickReplies } = await callReffy();
       removeTyping();
       addMessage('assistant', reply);
-      if (!transcriptSent && messages.length >= 4) {
+      if (false && messages.length >= 4) {
         transcriptSent = true;
         submitTranscript(prospectName, 'booking link sent', '', '');
       }
