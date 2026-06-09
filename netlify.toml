@@ -11,19 +11,19 @@
 [[redirects]]
   from = "/missionvalley/:name"
   to = "/?studio=missionvalley&name=:name"
-  status = 200
+  status = 301
 
 [[redirects]]
   from = "/lamesa/:name"
   to = "/?studio=lamesa&name=:name"
-  status = 200
+  status = 301
 
 [[redirects]]
   from = "/northpark/:name"
   to = "/?studio=northpark&name=:name"
-  status = 200
+  status = 301
 
 [[redirects]]
   from = "/santee/:name"
   to = "/?studio=santee&name=:name"
-  status = 200
+  status = 301
