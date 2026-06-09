@@ -7,3 +7,23 @@
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/missionvalley/:name"
+  to = "/?studio=missionvalley&name=:name"
+  status = 200
+
+[[redirects]]
+  from = "/lamesa/:name"
+  to = "/?studio=lamesa&name=:name"
+  status = 200
+
+[[redirects]]
+  from = "/northpark/:name"
+  to = "/?studio=northpark&name=:name"
+  status = 200
+
+[[redirects]]
+  from = "/santee/:name"
+  to = "/?studio=santee&name=:name"
+  status = 200

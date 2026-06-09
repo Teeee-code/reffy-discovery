@@ -6,7 +6,6 @@
   <title>Reffy Link Generator</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #f7f5f2;
@@ -17,7 +16,6 @@
       padding: 48px 16px 64px;
       color: #1a1a1a;
     }
-
     .card {
       background: #ffffff;
       border-radius: 16px;
@@ -26,227 +24,42 @@
       max-width: 520px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-
-    .logo-mark {
-      width: 36px;
-      height: 36px;
-      background: #e8dff5;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .logo-text {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a1a;
-      letter-spacing: -0.01em;
-    }
-
-    .logo-sub {
-      font-size: 12px;
-      color: #888;
-      font-weight: 400;
-    }
-
-    h1 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: #1a1a1a;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #888;
-      margin-bottom: 32px;
-      line-height: 1.5;
-    }
-
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+    .logo-mark { width: 36px; height: 36px; background: #e8dff5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .logo-text { font-size: 15px; font-weight: 600; color: #1a1a1a; letter-spacing: -0.01em; }
+    .logo-sub { font-size: 12px; color: #888; font-weight: 400; }
+    h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #1a1a1a; margin-bottom: 6px; }
+    .subtitle { font-size: 14px; color: #888; margin-bottom: 32px; line-height: 1.5; }
     .field { margin-bottom: 20px; }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 7px;
-    }
-
-    select, input[type="text"] {
-      width: 100%;
-      padding: 11px 14px;
-      font-size: 15px;
-      font-family: inherit;
-      color: #1a1a1a;
-      background: #fafaf9;
-      border: 1.5px solid #e8e5e0;
-      border-radius: 10px;
-      outline: none;
-      transition: border-color 0.15s;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-    }
-
-    select:focus, input[type="text"]:focus {
-      border-color: #b89fd8;
-      background: #fff;
-    }
-
+    label { display: block; font-size: 12px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
+    select, input[type="text"] { width: 100%; padding: 11px 14px; font-size: 15px; font-family: inherit; color: #1a1a1a; background: #fafaf9; border: 1.5px solid #e8e5e0; border-radius: 10px; outline: none; transition: border-color 0.15s; appearance: none; -webkit-appearance: none; }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    select:focus, input[type="text"]:focus { border-color: #b89fd8; background: #fff; }
     input::placeholder { color: #bbb; }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #f0ede8;
-      margin: 28px 0;
-    }
-
+    .divider { border: none; border-top: 1px solid #f0ede8; margin: 28px 0; }
     .output-section { display: none; }
     .output-section.visible { display: block; }
-
-    .output-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
-
-    .url-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f7f5f2;
-      border: 1.5px solid #e8e5e0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 20px;
-    }
-
-    .url-text {
-      flex: 1;
-      font-size: 13px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      color: #444;
-      word-break: break-all;
-      line-height: 1.4;
-    }
-
-    .copy-btn {
-      flex-shrink: 0;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-family: inherit;
-      font-weight: 500;
-      background: #1a1a1a;
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      white-space: nowrap;
-    }
-
+    .output-label { font-size: 12px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .url-row { display: flex; align-items: center; gap: 10px; background: #f7f5f2; border: 1.5px solid #e8e5e0; border-radius: 10px; padding: 10px 14px; margin-bottom: 20px; }
+    .url-text { flex: 1; font-size: 13px; font-family: 'SF Mono', 'Fira Code', monospace; color: #444; word-break: break-all; line-height: 1.4; }
+    .copy-btn { flex-shrink: 0; padding: 6px 14px; font-size: 13px; font-family: inherit; font-weight: 500; background: #1a1a1a; color: #fff; border: none; border-radius: 7px; cursor: pointer; transition: background 0.15s, transform 0.1s; white-space: nowrap; }
     .copy-btn:hover { background: #333; }
     .copy-btn:active { transform: scale(0.97); }
     .copy-btn.success { background: #4a9e6b; }
-
-    .message-block {
-      background: #fafaf9;
-      border: 1.5px solid #e8e5e0;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .message-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .message-type {
-      font-size: 12px;
-      font-weight: 500;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .copy-small {
-      padding: 4px 10px;
-      font-size: 12px;
-      font-family: inherit;
-      font-weight: 500;
-      background: transparent;
-      color: #888;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
+    .message-block { background: #fafaf9; border: 1.5px solid #e8e5e0; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .message-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .message-type { font-size: 12px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+    .copy-small { padding: 4px 10px; font-size: 12px; font-family: inherit; font-weight: 500; background: transparent; color: #888; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
     .copy-small:hover { background: #fff; color: #444; border-color: #bbb; }
     .copy-small.success { color: #4a9e6b; border-color: #4a9e6b; }
-
-    .message-body {
-      font-size: 14px;
-      color: #333;
-      line-height: 1.65;
-      white-space: pre-wrap;
-    }
-
-    .studio-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #f0ebfa;
-      color: #7a4db5;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      background: #b89fd8;
-      border-radius: 50%;
-    }
-
-    @media (max-width: 480px) {
-      .card { padding: 28px 20px; }
-      h1 { font-size: 20px; }
-    }
+    .message-body { font-size: 14px; color: #333; line-height: 1.65; white-space: pre-wrap; }
+    .studio-badge { display: inline-flex; align-items: center; gap: 6px; background: #f0ebfa; color: #7a4db5; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; margin-bottom: 20px; }
+    .dot { width: 6px; height: 6px; background: #b89fd8; border-radius: 50%; }
+    @media (max-width: 480px) { .card { padding: 28px 20px; } h1 { font-size: 20px; } }
   </style>
 </head>
 <body>
-
 <div class="card">
-
   <div class="logo">
     <div class="logo-mark">🌸</div>
     <div>
@@ -254,10 +67,8 @@
       <div class="logo-sub">Link Generator</div>
     </div>
   </div>
-
   <h1>Send a Reffy link</h1>
-  <p class="subtitle">Pick a studio and name. Get a personalized link plus ready-to-send messages.</p>
-
+  <p class="subtitle">Pick a studio and name. Get a clean link plus ready-to-send messages.</p>
   <div class="field">
     <label for="studio-select">Studio</label>
     <select id="studio-select" onchange="update()">
@@ -268,26 +79,21 @@
       <option value="santee">Santee</option>
     </select>
   </div>
-
   <div class="field">
     <label for="name-input">Prospect first name</label>
     <input type="text" id="name-input" placeholder="e.g. Sarah" oninput="update()" autocomplete="off" />
   </div>
-
   <div class="output-section" id="output">
     <hr class="divider" />
-
-    <div id="studio-badge" class="studio-badge">
+    <div class="studio-badge">
       <div class="dot"></div>
       <span id="badge-label"></span>
     </div>
-
     <div class="output-label">Your link</div>
     <div class="url-row">
       <span class="url-text" id="url-display"></span>
       <button class="copy-btn" id="copy-link-btn" onclick="copyItem('link')">Copy</button>
     </div>
-
     <div class="message-block">
       <div class="message-header">
         <span class="message-type">Text message</span>
@@ -295,7 +101,6 @@
       </div>
       <div class="message-body" id="sms-body"></div>
     </div>
-
     <div class="message-block">
       <div class="message-header">
         <span class="message-type">Email</span>
@@ -304,44 +109,43 @@
       <div class="message-body" id="email-body"></div>
     </div>
   </div>
-
 </div>
-
 <script>
   const studioLabels = {
     missionvalley: 'Club Pilates Mission Valley',
-    lamesa: 'Club Pilates La Mesa',
-    northpark: 'Club Pilates North Park',
-    santee: 'Club Pilates Santee'
+    lamesa:        'Club Pilates La Mesa',
+    northpark:     'Club Pilates North Park',
+    santee:        'Club Pilates Santee',
   };
 
   let store = { link: '', sms: '', email: '' };
 
   function update() {
     const studio = document.getElementById('studio-select').value;
-    const raw = document.getElementById('name-input').value.trim();
-    const slug = raw.toLowerCase().replace(/\s+/g, '');
-    const name = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
+    const raw    = document.getElementById('name-input').value.trim();
+    const slug   = raw.toLowerCase().replace(/\s+/g, '');
+    const name   = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
     const output = document.getElementById('output');
 
     if (!studio) { output.classList.remove('visible'); return; }
 
-    let url = 'meetreffy.com?studio=' + studio;
-    if (slug) url += '&name=' + slug;
-    store.link = 'https://' + url;
+    // Clean short URL — slash format, no params, works in iMessage without breaking
+    const shortUrl = slug
+      ? `meetreffy.com/${studio}/${slug}`
+      : `meetreffy.com/${studio}`;
 
-    document.getElementById('url-display').textContent = url;
+    store.link = 'https://' + shortUrl;
+
+    document.getElementById('url-display').textContent = shortUrl;
     document.getElementById('badge-label').textContent = studioLabels[studio];
 
     const hi = name ? 'Hey ' + name + '!' : 'Hey!';
 
-    store.sms = hi + ' I wanted you to meet Reffy 🌸 Our friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all → ' + url;
-
+    store.sms   = hi + ' I wanted you to meet Reffy 🌸 Our friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all → ' + shortUrl;
     store.email = hi + '\n\nI wanted you to meet Reffy 🌸\n\nOur friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all.\n\nChat here → ' + store.link;
 
-    document.getElementById('sms-body').textContent = store.sms;
+    document.getElementById('sms-body').textContent  = store.sms;
     document.getElementById('email-body').textContent = store.email;
-
     output.classList.add('visible');
 
     ['copy-link-btn','copy-sms-btn','copy-email-btn'].forEach(id => {
@@ -353,9 +157,9 @@
 
   function copyItem(type) {
     const map = {
-      link: ['copy-link-btn', store.link],
-      sms:  ['copy-sms-btn',  store.sms],
-      email:['copy-email-btn', store.email]
+      link:  ['copy-link-btn',  store.link],
+      sms:   ['copy-sms-btn',   store.sms],
+      email: ['copy-email-btn', store.email],
     };
     const [btnId, text] = map[type];
     navigator.clipboard.writeText(text).then(() => {
@@ -369,6 +173,5 @@
     });
   }
 </script>
-
 </body>
 </html>
