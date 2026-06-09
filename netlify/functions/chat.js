@@ -132,7 +132,7 @@ INTRO CLASS:
 - Free, 30-minute full-body Reformer session
 - Small group, personalized attention
 - Arrive 10 minutes early to complete waiver
-- Grip socks are required for all classes — purchase a pair at the studio or bring your own — grip socks are required and we do not loan them
+- Grip socks are required for all classes — purchase a pair at the studio or bring your own — NEVER say "grab a pair", always say "purchase a pair" — we do not loan socks
 - Form-fitting athletic apparel, full coverage
 - Water bottle recommended (refill station available)
 

@@ -704,7 +704,7 @@
       return;
     }
     const prefLabel = pref === 'call' ? 'give you a call' : 'send you a text';
-    submitTranscript(name, pref, phone, email);
+    submitTranscript(name, pref, "", "");
     document.getElementById('human-form-area').innerHTML =
       `<div class="success-note">Got it, ${name}! Someone from ${studioName} will ${prefLabel} within 24 hours. So excited to meet you!</div>`;
     addMessage('assistant', `Perfect! I've sent your info to the team, ${name}. They'll ${prefLabel} within 24 hours — they're so excited to meet you! 🎉`);
