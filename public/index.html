@@ -437,7 +437,7 @@
 
   <div class="hero">
     <div class="studio-label" id="studio-label">Club Pilates</div>
-    <div class="reffy-avatar"><img src="reffy-avatar.png" alt="Reffy" /></div>
+    <div class="reffy-avatar"><img src="/reffy-avatar.png" alt="Reffy" /></div>
     <div class="reffy-name">Hi, I'm Reffy!</div>
     <div class="reffy-tagline">Your friendly Pilates guide — here to help, no pressure</div>
   </div>
@@ -448,9 +448,9 @@
 
   <div class="video-section" id="video-section">
     <div class="video-player" id="video-player" onclick="startVideo()">
-      <img class="video-thumb" src="reffy-avatar.png" alt="Meet Reffy" id="video-thumb" />
+      <img class="video-thumb" src="/reffy-avatar.png" alt="Meet Reffy" id="video-thumb" />
       <video id="reffy-video" playsinline>
-        <source src="reffy-intro.mp4" type="video/mp4" />
+        <source src="/reffy-intro.mp4" type="video/mp4" />
       </video>
       <div class="play-overlay" id="play-overlay">
         <div class="play-btn-circle">
@@ -531,7 +531,7 @@
     if (role !== 'user') {
       const av = document.createElement('div');
       av.className = 'avatar-sm';
-      av.innerHTML = '<img src="reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%;"/>';
+      av.innerHTML = '<img src="/reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%;"/>';
       row.appendChild(av);
     }
     const bubble = document.createElement('div');
@@ -572,7 +572,7 @@
     row.id = 'typing-indicator';
     const av = document.createElement('div');
     av.className = 'avatar-sm';
-    av.innerHTML = '<img src="reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:50%;" />';
+    av.innerHTML = '<img src="/reffy-avatar.png" alt="Reffy" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:50%;" />';
     row.appendChild(av);
     const bubble = document.createElement('div');
     bubble.className = 'bubble reffy';
