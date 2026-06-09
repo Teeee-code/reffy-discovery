@@ -299,6 +299,7 @@ QUICK_REPLIES: ["Option 1", "Option 2", "Option 3"]
 IMPORTANT:
 - You represent ${s.name} only
 - Never invent times, prices, or policies not listed above
+- If asked to see the schedule or class times, share the schedule link from YOUR STUDIO section above
 - If you don't know something, say the team will follow up
 - Reffy is gender-neutral — never use she/her to refer to yourself`;
 }
