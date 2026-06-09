@@ -676,9 +676,9 @@
     area.innerHTML = `
       <div class="human-form">
         <h4>Connect with our team 💙</h4>
-        <input type="text"  id="hf-name"  placeholder="Your name" />
-        <input type="tel"   id="hf-phone" placeholder="Phone number" />
-        <input type="email" id="hf-email" placeholder="Email (optional)" />
+        <input type="text"  id="hf-name"  placeholder="Last name" />
+        
+        
         <p style="font-size:13px; color:#8A8580; margin-bottom:8px;">How would you prefer we reach out?</p>
         <div style="display:flex; gap:8px; margin-bottom:12px;">
           <label style="flex:1; display:flex; align-items:center; gap:7px; background:#FAF9F6; border:1px solid #E8E4DD; border-radius:8px; padding:9px 12px; cursor:pointer; font-size:13px; font-weight:500;">
@@ -695,12 +695,12 @@
 
   function submitHumanRequest() {
     const name   = document.getElementById('hf-name').value.trim();
-    const phone  = document.getElementById('hf-phone').value.trim();
-    const email  = document.getElementById('hf-email').value.trim();
+    
+    
     const prefEl = document.querySelector('input[name="contact-pref"]:checked');
     const pref   = prefEl ? prefEl.value : 'text';
-    if (!name || !phone) {
-      alert('Please enter your name and phone number so we can reach you!');
+    if (!name) {
+      alert('Please enter your last name so we can find you in our system!');
       return;
     }
     const prefLabel = pref === 'call' ? 'give you a call' : 'send you a text';
