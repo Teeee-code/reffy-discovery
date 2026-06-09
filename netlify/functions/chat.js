@@ -206,6 +206,7 @@ INTRO CLASS TIMES:
 - All times: ${s.introTimes.all.join(", ")}
 
 SCHEDULE LINK: ${s.scheduleLink}
+SCHEDULE NOTE: ${s.scheduleNote || "Classes run Monday-Friday with a midday break around 1-3pm; evening classes resume around 3-4pm. First classes start as early as 6am."}
 
 MEMBERSHIP LINKS FOR YOUR STUDIO:
 - Single ($35): ${s.membershipLinks.single}
