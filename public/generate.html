@@ -53,6 +53,8 @@
     .copy-small:hover { background: #fff; color: #444; border-color: #bbb; }
     .copy-small.success { color: #4a9e6b; border-color: #4a9e6b; }
     .message-body { font-size: 14px; color: #333; line-height: 1.65; white-space: pre-wrap; }
+    .subject-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .subject-text { flex: 1; font-size: 13px; color: #444; font-style: italic; }
     .studio-badge { display: inline-flex; align-items: center; gap: 6px; background: #f0ebfa; color: #7a4db5; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; margin-bottom: 20px; }
     .dot { width: 6px; height: 6px; background: #b89fd8; border-radius: 50%; }
     @media (max-width: 480px) { .card { padding: 28px 20px; } h1 { font-size: 20px; } }
@@ -106,6 +108,10 @@
         <span class="message-type">Email</span>
         <button class="copy-small" id="copy-email-btn" onclick="copyItem('email')">Copy</button>
       </div>
+      <div class="subject-row">
+        <span class="subject-text" id="subject-display"></span>
+        <button class="copy-small" id="copy-subject-btn" onclick="copyItem('subject')">Copy subject</button>
+      </div>
       <div class="message-body" id="email-body"></div>
     </div>
   </div>
@@ -118,7 +124,7 @@
     santee:        'Club Pilates Santee',
   };
 
-  let store = { link: '', sms: '', email: '' };
+  let store = { link: '', sms: '', email: '', subject: '' };
 
   function update() {
     const studio = document.getElementById('studio-select').value;
@@ -129,7 +135,6 @@
 
     if (!studio) { output.classList.remove('visible'); return; }
 
-    // Clean short URL — slash format, no params, works in iMessage without breaking
     const shortUrl = slug
       ? `meetreffy.com/${studio}/${slug}`
       : `meetreffy.com/${studio}`;
@@ -140,35 +145,43 @@
     document.getElementById('badge-label').textContent = studioLabels[studio];
 
     const hi = name ? 'Hey ' + name + '!' : 'Hey!';
+    const studioShort = studioLabels[studio];
 
-    store.sms   = hi + ' I wanted you to meet Reffy 🌸 Our friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all → ' + shortUrl;
-    store.email = hi + '\n\nI wanted you to meet Reffy 🌸\n\nOur friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all.\n\nChat here → ' + store.link;
+    // Text — keep emoji
+    store.sms = hi + ' I wanted you to meet Reffy \uD83C\uDF38 Our friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all → ' + shortUrl;
 
-    document.getElementById('sms-body').textContent  = store.sms;
-    document.getElementById('email-body').textContent = store.email;
+    // Email subject — no emoji
+    store.subject = 'Meet Reffy, your ' + studioShort + ' guide';
+
+    // Email body — no emoji
+    store.email = hi + '\n\nI wanted you to meet Reffy — our friendly guide who can answer all your questions about Club Pilates and help you find your perfect first step — no pressure at all.\n\nChat here → ' + store.link;
+
+    document.getElementById('sms-body').textContent   = store.sms;
+    document.getElementById('subject-display').textContent = store.subject;
+    document.getElementById('email-body').textContent  = store.email;
     output.classList.add('visible');
 
-    ['copy-link-btn','copy-sms-btn','copy-email-btn'].forEach(id => {
+    ['copy-link-btn','copy-sms-btn','copy-email-btn','copy-subject-btn'].forEach(id => {
       const b = document.getElementById(id);
-      b.classList.remove('success');
-      b.textContent = 'Copy';
+      if (b) { b.classList.remove('success'); b.textContent = id === 'copy-subject-btn' ? 'Copy subject' : 'Copy'; }
     });
   }
 
   function copyItem(type) {
     const map = {
-      link:  ['copy-link-btn',  store.link],
-      sms:   ['copy-sms-btn',   store.sms],
-      email: ['copy-email-btn', store.email],
+      link:    ['copy-link-btn',    store.link],
+      sms:     ['copy-sms-btn',     store.sms],
+      email:   ['copy-email-btn',   store.email],
+      subject: ['copy-subject-btn', store.subject],
     };
     const [btnId, text] = map[type];
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById(btnId);
       btn.classList.add('success');
-      btn.textContent = 'Copied ✓';
+      btn.textContent = 'Copied!';
       setTimeout(() => {
         btn.classList.remove('success');
-        btn.textContent = 'Copy';
+        btn.textContent = btnId === 'copy-subject-btn' ? 'Copy subject' : 'Copy';
       }, 2000);
     });
   }
