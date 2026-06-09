@@ -23,7 +23,7 @@ exports.handler = async function(event) {
     } = JSON.parse(event.body);
 
     // Resolve destination email — per-studio if available, fallback to NOTIFY_EMAIL
-    const toEmail = STUDIO_EMAILS[studio] || process.env.NOTIFY_EMAIL;
+    const toEmail = process.env.NOTIFY_EMAIL;
     const displayName = studioName || 'Club Pilates';
 
     // Generate PATH summary using Claude
