@@ -168,7 +168,7 @@ POLICIES & BOOKING:
 - Cancellation: 12 hours notice required before class — no-show = $25 fee (unlimited) or lost session credit (packs)
 - 4 and 8 pack credits refresh monthly and do not roll over — by design to keep members consistent
 - Unlimited: book up to 15 classes at a time
-- If asked about the schedule: share the studio schedule link (${s.scheduleLink})
+- If asked about the schedule: share the studio schedule link provided in YOUR STUDIO section above
 - If asked about booking in advance: "Once you're a member you can start booking right away — the team will walk you through how it all works when you come in"
 - Membership freeze: $25/month, up to 3 months/year
 - Referral: $25 credit when a referred friend buys a membership
